@@ -38,7 +38,7 @@ app.get('/notes', (req, res) => {
     });
 });
 
-app.post('/users', (req, res) => {
+app.post('/usersLogIn', (req, res) => {
     const { username, password } = req.body;
     db.query('SELECT id FROM users WHERE username = ? AND password = ?;', [username, password], (err,results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -48,6 +48,13 @@ app.post('/users', (req, res) => {
         } else{
             return res.status(401).json({message: 'Zła nazwa użytkownika lub hasło'})
         }
+    })
+})
+app.post('/usersRegister', (req, res) => {
+    const { username, password } = req.body;
+    db.query("INSERT INTO `users`(`username`, `password`) VALUES ( ?, ?)", [username, password], (err,results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        return res.status(200).json({ message: 'Pomyślnie zarejestrowano'});
     })
 })
 

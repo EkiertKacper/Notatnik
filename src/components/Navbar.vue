@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, defineEmits } from 'vue';
+import { ref, onMounted } from 'vue';
 import NoteCreator from './NoteCreator.vue';
 
 //Style zmieniające menu w hamburgera

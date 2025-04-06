@@ -1,6 +1,6 @@
 <script setup>
   import { ref, onMounted, watch } from 'vue';
-  import NotePage from './NotePage.vue';
+  import Note from './Note.vue';
   import axios from 'axios';
   import { useNoteAdder } from '../store/noteAdder';
 
@@ -28,9 +28,12 @@
 );
 
 </script>
-
 <template>
-  <NotePage/>
+    <main>
+      <div class="notesContainer" v-for="(note) in notes">
+        <Note :notes="note"/>
+      </div>
+    </main>
 </template>
 
 <style scoped>
@@ -39,5 +42,4 @@
     column-gap: 0rem;
     padding: 1rem 5rem 1rem 5rem;
   }
-
 </style>
