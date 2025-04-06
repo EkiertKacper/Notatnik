@@ -1,0 +1,55 @@
+// Zmienne
+$primary-color: #007AFF;
+$background-color: #F5F5F5;
+$light-grey: #DDDDDD;
+$text-color: #333333;
+$font-size: 16px;
+
+// Reset i ogólne style
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  color: $text-color;
+  border-color: $light-grey;
+  font-size: $font-size;
+}
+
+body {
+  background-color: $background-color;
+}
+
+// Nawigacja
+nav {
+  width: 15vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $light-grey;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+// Główna zawartość
+main {
+  width: 85vw;
+  margin-left: 15vw;
+}
+
+// Przycisk
+button {
+  background-color: $primary-color;
+  color: $background-color;
+  padding: 0.5rem 1rem;
+}
+#logPage{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
