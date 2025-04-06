@@ -1,6 +1,6 @@
 <script setup>
   import { ref, onMounted, watch } from 'vue';
-  import Note from './note.vue';
+  import Note from './Note.vue';
   import axios from 'axios';
   import { useNoteAdder } from '../store/noteAdder';
 
