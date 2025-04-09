@@ -1,53 +1,50 @@
 <script setup>
-    import { ref } from 'vue';
-    import axios from 'axios';
-    import { useNoteAdder } from '../store/noteAdder';
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
 
+    const props = defineProps({
+      note:Object
+    });
 
-
-    const title = ref('');
-    const content = ref('');
+    const title = ref()
+    const content = ref()
     const emit = defineEmits();
-    const noteCreatorDisplay = ref('none');
-    const noteAdder = useNoteAdder();
+
+    onMounted(()=>{
+        title.value.value = props.note.title
+        content.value.value = props.note.content
+    })
 
     const confirm = async () => {
         if(title.value.value === '' || content.value.value === ''){
             alert("Notatka nie może być pusta");
-            noteCreatorDisplay.value = 'none'
-            emit('close', noteCreatorDisplay.value)
+            emit('editedNote')
         }else{
             try {
                 const noteData = {
                     title: title.value.value,
-                    content: content.value.value,
-                    created_at: new Date()
+                    content: content.value.value
                 };
-                await axios.post('http://localhost:3000/notes', noteData);
-                noteAdder.addNote(noteData)
-                emit('close', noteCreatorDisplay.value);
-                noteCreatorDisplay.value = 'none';
-                document.getElementById('title').value = '';
-                document.getElementById('noteArea').value = '';
+                await axios.put(`http://localhost:3000/noteEdit/${props.note.id}`, noteData);
+                emit('editedNote', noteData)
             } catch (error) {
               console.error('Błąd wysyłania notatki:', error);
               alert('Wystąpił błąd podczas wysyłania notatki.');
             }
+
         }
     }
-
 </script>
-
 <template>
     <div class="container">
         <div class="inputs">
             <input ref="title" type="text" id="title" placeholder="Tytuł">
             <textarea ref="content" name="note" id="noteArea" placeholder="Treść"></textarea>
         </div>
-        <button @click="confirm">Dodaj notatkę</button>
+        <button @click="confirm">Zmień notatkę</button>
     </div>
+    <div class="overlay"></div>
 </template>
-
 <style scoped>
     .container{
         position: fixed; 
@@ -106,7 +103,6 @@
         background-color: #BBBBBB;
         transition: 0s;
     }
-
     @media (max-width: 1024px){
         .container{
             width: 70vw;
@@ -128,12 +124,7 @@
             height: 80%;
         }
     }
-    @media (max-width: 767px){
 
-    }
-    @media (max-width: 480px) {
-
-    }
     
 
 </style>

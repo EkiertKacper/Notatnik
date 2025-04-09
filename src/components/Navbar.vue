@@ -98,15 +98,17 @@ const createNote = () => {
         background-color: transparent;
         color: #333333;
         border: none;
+        cursor: pointer;
+        transition: all 0.2s;
     }
     .navButton:hover{
         background-color: #B38D0A;
-        transition: background-color 0.1s;
+        transition: all 0.2s;
         color: #f5f5f5;
     }
     .navButton:active{
         background-color: #BBBBBB;
-        transition: 0s;
+        transition: 0.1s;
     }
 
 

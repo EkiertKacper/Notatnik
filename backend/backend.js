@@ -66,6 +66,21 @@ app.post('/notes', (req, res) => {
     })
 })
 
+app.put('/noteEdit/:id', (req, res) => {
+    const { title, content } = req.body;
+    const userId = req.params.id
+    db.query('UPDATE notes SET title = ?, content = ? WHERE id = ?', [title, content, userId], (err, result) => {
+        if (err) {
+            console.error('Błąd aktualizacji notatki:', err);
+            return res.status(500).json({error: err.message});
+          }      
+          if (result.affectedRows === 0) {
+            return res.status(404).send('Notatka nie znaleziona');
+          }     
+          return res.status(200).json({ message: 'Pomyślnie zedytowano'});
+    })
+})
+
 
 
 app.listen(3000, () => console.log('Serwer działa na porcie 3000'));

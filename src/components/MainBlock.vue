@@ -24,6 +24,7 @@
   () => noteAdder.$state.note,
   () => {
     notes.value.push(noteAdder.fetchNote())
+    console.log(noteAdder.fetchNote())
   }
 );
 

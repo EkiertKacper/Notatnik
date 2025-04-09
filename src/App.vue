@@ -8,7 +8,6 @@ const logged = ref(false);
 
 const handleIsLogged = (isLogged) => {
   logged.value = isLogged
-  console.log(logged.value)
 }
 </script>
 
@@ -27,6 +26,8 @@ const handleIsLogged = (isLogged) => {
 <style scoped>
   .container{
     display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
 
