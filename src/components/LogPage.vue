@@ -38,16 +38,13 @@
     const register = async () => {
         if(password.value === password2.value){
             try{
-
                     const regData = {
                         username: username.value,
                         password:password.value
                     }
-                    console.log(regData)
                     const res = await axios.post('http://localhost:3000/usersRegister', regData)
                     registered.registered = true
                     registered.message = res.data.message
-                
             } catch (error){
                 console.log(error.message)
             }

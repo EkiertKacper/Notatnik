@@ -1,10 +1,11 @@
 <script setup>
   import { ref, onMounted, watch } from 'vue';
-  import NotePage from './NotePage.vue';
   import axios from 'axios';
   import { useNoteAdder } from '../store/noteAdder';
+  import { usePageChanger } from '../store/pageChanger';
 
-  const notes = ref()
+
+  const notes = ref('')
   const noteAdder = useNoteAdder();
 
   const fetchNotes = async () => {
@@ -21,17 +22,20 @@
   });
 
   watch(
-  () => noteAdder.$state.note,
-  () => {
-    notes.value.push(noteAdder.fetchNote())
-    console.log(noteAdder.fetchNote())
-  }
-);
+    () => noteAdder.$state.note,
+    () => {
+      notes.value.push(noteAdder.fetchNote())
+      console.log(noteAdder.fetchNote())
+    }
+  );
+
+  const pageChange = usePageChanger()
+  
 
 </script>
 
 <template>
-  <NotePage/>
+  <component :is="pageChange.activePage"/>
 </template>
 
 <style scoped>

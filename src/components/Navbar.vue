@@ -1,6 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineComponent } from 'vue';
 import NoteCreator from './NoteCreator.vue';
+import { usePageChanger } from '../store/pageChanger';
+import Settings from './Settings.vue';
+import Trash from './Trash.vue';
+import NotePage from './NotePage.vue';
 
 //Style zmieniające menu w hamburgera
 const displayMode = ref('flex');    
@@ -40,11 +44,22 @@ const noteCreatorDisplay = ref('none')
 const createNote = () => {
     noteCreatorDisplay.value = noteCreatorDisplay.value === 'none' ? "flex" : "none"
 }
+
+//Stałe i funkcja obsługująca przyciski w navie. Używa pliku pinia pageChanger.js
+const settings = defineComponent(Settings)
+const trash = defineComponent(Trash)
+const notePage = defineComponent(NotePage)
+const pageChange = usePageChanger();
+const pageChanger = (settings) => {
+    pageChange.changePage(settings)
+}
+
+
 </script>
 
 <template>
     <nav>
-        <img id="logo" src="../assets/icon.png" alt="logo">
+        <img id="logo" src="../assets/icon.png" alt="logo" @click="pageChanger(notePage)">
         <button id="hamburgerButton" @click="handleMenu" :style="{display: buttonDisplay}">
             <span class="material-symbols-outlined">menu</span>
         </button>
@@ -57,8 +72,8 @@ const createNote = () => {
                 </ul>
             </li>
             <li><button class="navButton">Edytuj kategorie</button></li>
-            <li><button class="navButton">Kosz</button></li>
-            <li><button class="navButton">Ustawienia</button></li>
+            <li><button class="navButton" @click="pageChanger(trash)">Kosz</button></li>
+            <li><button class="navButton" @click="pageChanger(settings)">Ustawienia</button></li>
         </ul>
     </nav>
     <div class="overlay" :style="{display: noteCreatorDisplay}"></div>

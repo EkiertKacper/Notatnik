@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
+const bcrypt = require('bcrypt')
 const app = express();
 app.use(express.json()); // Obsługa JSON
 app.use(cors()); // Zezwolenie na połączenie z Vue
@@ -40,19 +41,40 @@ app.get('/notes', (req, res) => {
 
 app.post('/usersLogIn', (req, res) => {
     const { username, password } = req.body;
-    db.query('SELECT id FROM users WHERE username = ? AND password = ?;', [username, password], (err,results) => {
+    db.query('SELECT id, password FROM users WHERE username = ?;', [username], async (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
-        if(JSON.stringify(results) !== "[]"){
+
+        if (results.length > 0) {
+            const hashedPasswordFromDB = results[0].password;
+            const userId = results[0].id;
             user = results[0].id
-            return res.status(200).json({ message: 'Zalogowano', userId: results[0].id });
-        } else{
-            return res.status(401).json({message: 'Zła nazwa użytkownika lub hasło'})
+
+            try {
+                const match = await bcrypt.compare(password, hashedPasswordFromDB);
+
+                if (match) {
+                    return res.status(200).json({ message: 'Zalogowano', userId: userId });
+                } else {
+                    return res.status(401).json({ message: 'Zła nazwa użytkownika lub hasło' });
+                }
+            } catch (error) {
+                return res.status(500).json({ error: error.message });
+            }
+        } else {
+            return res.status(401).json({ message: 'Zła nazwa użytkownika lub hasło' });
         }
     })
 })
-app.post('/usersRegister', (req, res) => {
+
+const hashPassword = async(password) => {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    return hashedPassword;
+}
+app.post('/usersRegister', async (req, res) => {
     const { username, password } = req.body;
-    db.query("INSERT INTO `users`(`username`, `password`) VALUES ( ?, ?)", [username, password], (err,results) => {
+    const hashedPassword = await hashPassword(password)
+    db.query("INSERT INTO `users`(`username`, `password`) VALUES ( ?, ?)", [username, hashedPassword], (err,results) => {
         if (err) return res.status(500).json({ error: err.message });
         return res.status(200).json({ message: 'Pomyślnie zarejestrowano'});
     })
