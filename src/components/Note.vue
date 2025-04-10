@@ -8,19 +8,25 @@ import NoteEditor from './NoteEditor.vue';
 
     //Funkcja formatująca date i sprawdzająca w jakim formacie ją wyświetlić w zależności od dnia powstania notatki
     const formattedDate = computed(() => {
-        const date = new Date(props.notes.created_at);
-        const actDate = new Date()
-        if((date.getDay && date.getMonth && date.getFullYear()) == (actDate.getDate && actDate.getMonth && actDate.getFullYear())){
-            const hour = String(date.getHours()).padStart(2,'0')
-            const minutes = String(date.getMinutes()).padStart(2,'0')
-            return `${hour}:${minutes}`
-        } else{
-            const day = String(date.getDate()).padStart(2, '0')
-            const month = String(date.getMonth() + 1).padStart(2, '0')
-            const year = date.getFullYear()
-            return `${day}-${month}-${year}`
-        }        
-    });
+    const date = new Date(props.notes.created_at);
+    const now = new Date();
+
+    const isToday = 
+        date.getDate() === now.getDate() &&
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear();
+
+    if (isToday) {
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hour}:${minutes}`;
+    } else {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+});
 
     const isEditorVisible = ref(false)
     const editNote = () => {
@@ -32,9 +38,6 @@ import NoteEditor from './NoteEditor.vue';
         props.notes.created_at = new Date()
         isEditorVisible.value = false
     }
-    
-
-
 </script>
 
 <template>
