@@ -25,7 +25,6 @@
     () => noteAdder.$state.note,
     () => {
       notes.value.push(noteAdder.fetchNote())
-      console.log(noteAdder.fetchNote())
     }
   );
 
@@ -35,7 +34,7 @@
 </script>
 
 <template>
-  <main>
+  <main style="margin-left: 15vw;">
     <component :is="pageChange.activePage"/>
   </main>
 </template>

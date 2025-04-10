@@ -8,7 +8,7 @@ import axios from 'axios';
 
     const title = ref()
     const content = ref()
-    const emit = defineEmits();
+    const emit = defineEmits(['editedNote']);
 
     onMounted(()=>{
         title.value.value = props.note.title

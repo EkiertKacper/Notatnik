@@ -41,6 +41,7 @@
         .theme{
             display: flex;
             width: 15%;
+            min-width: 9rem;
             justify-content: space-around;
             align-items: center;
             .border{

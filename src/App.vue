@@ -12,11 +12,9 @@ const handleIsLogged = (isLogged) => {
 </script>
 
 <template>
-  <div class="container">
     <LogPage v-if="!logged" :isLogged="logged" @isLogged="handleIsLogged"/>
     <Navbar v-if="logged"/>
     <MainBlock v-if="logged"/>
-  </div>
 </template>
 
 <style lang="scss">

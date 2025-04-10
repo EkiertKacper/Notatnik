@@ -9,7 +9,7 @@
     const wrongData = reactive({isWrong: false, message:''})
     const isLoggining = ref(true)
     const registered = reactive({registered:false, message:''})
-    const emit = defineEmits();
+    const emit = defineEmits(['isLogged']);
 
     const sendData = async () => {
         try{
@@ -19,6 +19,7 @@
             }
             const res = await axios.post('http://localhost:3000/usersLogIn', loginData)
             emit('isLogged', !isLogged)
+            
         } catch (error){
             wrongData.isWrong = true
             if (error.response) {
