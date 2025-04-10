@@ -23,11 +23,3 @@ const handleIsLogged = (isLogged) => {
 @use './assets/styles/style.scss';  
 </style>
 
-<style scoped>
-  .container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-</style>
-

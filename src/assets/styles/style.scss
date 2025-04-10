@@ -18,6 +18,7 @@ $font-size: 16px;
 
 body {
   background-color: $background-color;
+  margin-left: 15vw;
 }
 
 // Nawigacja
@@ -36,7 +37,6 @@ nav {
 // Główna zawartość
 main {
   width: 85vw;
-  margin-left: 15vw;
 }
 
 // Przycisk

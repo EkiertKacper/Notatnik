@@ -35,14 +35,7 @@
 </script>
 
 <template>
-  <component :is="pageChange.activePage"/>
+  <main>
+    <component :is="pageChange.activePage"/>
+  </main>
 </template>
-
-<style scoped>
-  main{
-    column-count: 4;
-    column-gap: 0rem;
-    padding: 1rem 5rem 1rem 5rem;
-  }
-
-</style>
