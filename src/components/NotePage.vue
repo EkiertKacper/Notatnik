@@ -11,6 +11,7 @@
     try{
       const response = await axios.get('http://localhost:3000/notes')
       notes.value = response.data
+      noteAdder.addAllNotes(response.data)
     } catch (error){
       console.log('Błąd pobierania danych: ', error)
     }

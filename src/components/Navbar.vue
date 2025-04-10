@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted, defineComponent } from 'vue';
+import { ref, onMounted, defineComponent, reactive } from 'vue';
 import NoteCreator from './NoteCreator.vue';
 import { usePageChanger } from '../store/pageChanger';
 import Settings from './Settings.vue';
 import Trash from './Trash.vue';
 import NotePage from './NotePage.vue';
+import { useNoteAdder } from '../store/noteAdder';
 
 //Style zmieniające menu w hamburgera
 const displayMode = ref('flex');    
@@ -43,6 +44,7 @@ onMounted(() => {
 const noteCreatorDisplay = ref('none')
 const createNote = () => {
     noteCreatorDisplay.value = noteCreatorDisplay.value === 'none' ? "flex" : "none"
+    pageChange.changePage(notePage)
 }
 
 //Stałe i funkcja obsługująca przyciski w navie. Używa pliku pinia pageChanger.js
@@ -52,6 +54,17 @@ const notePage = defineComponent(NotePage)
 const pageChange = usePageChanger();
 const pageChanger = (settings) => {
     pageChange.changePage(settings)
+}
+
+const notes = useNoteAdder()
+const categories = ref()
+const handleCategories = (e) => {
+    const catDropdown = document.querySelector('.catDropdown')
+    catDropdown.classList.toggle("dropped")
+    e.target.classList.toggle("dropped")
+    const cat = new Set([...notes.fetchCategoryList()])
+    cat.delete(undefined)
+    categories.value = [...cat]
 }
 
 
@@ -65,12 +78,15 @@ const pageChanger = (settings) => {
         </button>
         <ul class="menu" :style="{display: displayMode}">
             <li><button id="addNoteBut" class="navButton" @click="createNote">Dodaj notatkę</button></li>
-            <li>
-                <button class="navButton">Kategorie</button>
-                <ul id="catDropdown">
-            
+
+            <li id="catDropdownItem">
+                <button class="navButton" @click="handleCategories">Kategorie</button>
+                <ul class="catDropdown">
+                    <button class="catListBut addBut">Dodaj kategorie</button>
+                    <button class="catListBut" v-for="category in categories">{{ category }}</button>
                 </ul>
             </li>
+
             <li><button class="navButton">Edytuj kategorie</button></li>
             <li><button class="navButton" @click="pageChanger(trash)">Kosz</button></li>
             <li><button class="navButton" @click="pageChanger(settings)">Ustawienia</button></li>
@@ -80,7 +96,7 @@ const pageChanger = (settings) => {
     <NoteCreator @close="createNote" :style="{display: noteCreatorDisplay}"/>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
     ul{
         display: flex;
         width: 100%;
@@ -90,10 +106,11 @@ const pageChanger = (settings) => {
         justify-content: space-between;
         align-items: center;
         margin: 10% 0% 10% 0%;
-    }
-    ul li{
-        display: flex;
-        justify-content: center;
+        li{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
     }
     #logo{
         margin-top: -5%;
@@ -102,9 +119,6 @@ const pageChanger = (settings) => {
     #hamburgerButton{
         width: 50%;
         margin: 10% 0% 10% 0%;
-    }
-    li{
-        width: 100%;
     }
     .navButton{
         padding: 1rem;
@@ -115,23 +129,46 @@ const pageChanger = (settings) => {
         border: none;
         cursor: pointer;
         transition: all 0.2s;
+        &:hover{
+            background-color: #B38D0A;
+            transition: all 0.2s;
+            color: #f5f5f5;
+        }
+        &:active{
+            background-color: #BBBBBB;
+            transition: 0.1s;
+        }
+        &.dropped{
+            background-color: #B38D0A;
+            color: #f5f5f5;
+        }
     }
-    .navButton:hover{
-        background-color: #B38D0A;
-        transition: all 0.2s;
-        color: #f5f5f5;
+    #catDropdownItem{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
     }
-    .navButton:active{
-        background-color: #BBBBBB;
-        transition: 0.1s;
-    }
-
-
-    /**
-        * TODO: Zrób dropdown
-    */
-    #catDropdown{
+    .catDropdown{
         display: none;
+        color: #333333;
+        margin: 0;
+        margin-bottom: 1rem;
+    }
+    .dropped{
+        display: block;
+    }
+    .catListBut{
+        background-color: #CCC;
+        width: 100%;
+        border: none;
+        padding: 1rem;
+        cursor: pointer;
+        &.addBut{
+            border-bottom: 2px solid #B38D0A;
+        }
+        &:hover{
+            background-color: #AAA;
+        }
     }
     .overlay {
         position: fixed;
@@ -145,13 +182,6 @@ const pageChanger = (settings) => {
         #logo{
             width: 90%;
         }
-
-    }
-    @media (max-width: 767px){
-
-    }
-    @media (max-width: 480px) {
-
     }
 
 </style>

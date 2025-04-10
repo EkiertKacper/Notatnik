@@ -2,7 +2,8 @@
 
     export const useNoteAdder = defineStore('noteAdder', {
     state: () => ({
-        note: undefined
+        note: undefined,
+        allNotes: undefined
     }),
     actions: {
         addNote(note) {
@@ -10,6 +11,20 @@
         },
         fetchNote() {
             return this.note
+        },
+        addAllNotes(notes){
+            this.allNotes = notes
+        },
+        pushNote(note){
+            console.log(this.allNotes)
+        },
+        fetchCategoryList() {
+            let categories = new Set()
+            this.allNotes.forEach(category => {
+                categories.add(category.category)
+            });
+            categories.delete(null, undefined)
+            return categories
         }
     },
     });
