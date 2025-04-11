@@ -60,11 +60,20 @@ const notes = useNoteAdder()
 const categories = ref()
 const handleCategories = (e) => {
     const catDropdown = document.querySelector('.catDropdown')
-    catDropdown.classList.toggle("dropped")
+    const isOpen = catDropdown.classList.toggle("dropped")
     e.target.classList.toggle("dropped")
     const cat = new Set([...notes.fetchCategoryList()])
     cat.delete(undefined)
     categories.value = [...cat]
+    if (isOpen) {
+        const height = 3.5 + 3.5 * categories.value.length;
+        if(height>28){
+            catDropdown.style.overflow = 'auto'
+        }
+        catDropdown.style.height = `${height}rem`;
+    } else {
+        catDropdown.style.height = '0';
+    }
 }
 
 
@@ -122,6 +131,7 @@ const handleCategories = (e) => {
     }
     .navButton{
         padding: 1rem;
+        height: 3.5rem;
         text-wrap: nowrap;
         width: 100%;
         background-color: transparent;
@@ -149,17 +159,22 @@ const handleCategories = (e) => {
         justify-content: flex-start;
     }
     .catDropdown{
-        display: none;
-        color: #333333;
-        margin: 0;
-        margin-bottom: 1rem;
-    }
-    .dropped{
         display: block;
+        color: #333333;
+        transform: scaleY(0);
+        transform-origin: top;
+        margin: 0;
+        height: 0;
+        transition: transform 0.5s, height 0.5s
+    }
+    .catDropdown.dropped{
+        transform: scaleY(1);
+        max-height: 28rem;
     }
     .catListBut{
         background-color: #CCC;
         width: 100%;
+        height: 3.5rem;
         border: none;
         padding: 1rem;
         cursor: pointer;
